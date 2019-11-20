@@ -35,6 +35,14 @@ class Server(object):
 
         while True:
             
+            status = input("listen to next client? (Y/N)")
+
+            if status == "n" or status == "N":
+                break
+            
+            if status != "y" and status != "Y":
+                continue
+            
             conn, addr = self.glassServerSocket.accept()
                 
             try:
@@ -53,7 +61,7 @@ class Server(object):
                         imageFile.write(data)
                         imageFile.close()
                         conn.send("GOT IMAGE".encode())
-                        conn.shutdown(SHUT_WR) # instead of shutting down connection immediately, get the names with the help of Kairos and send them back
+                        conn.shutdown(SHUT_WR) # TODO instead of shutting down connection immediately, get the names with the help of Kairos and send them back
                 elif request.startswith('CLOSE'):
                     print("Got close")
                     conn.shutdown(SHUT_WR)
