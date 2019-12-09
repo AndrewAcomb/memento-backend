@@ -5,3 +5,5 @@ select/
 .DS_STORE
 
 __pycache__
+
+image/glass_face/

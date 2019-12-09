@@ -88,6 +88,8 @@ class Server(object):
 
     def analyzeFrame(self, image_path):
         print("Analyzing a frame from the client:")
+        if not os.path.exists('image/glass_face'):
+            os.mkdir('image/glass_face')
         image_paths = glob.glob(os.path.join('image/glass_face/', "*"))
         face_count = len(image_paths)
         img = cv2.imread(image_path, 3)
