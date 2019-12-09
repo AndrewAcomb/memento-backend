@@ -28,7 +28,7 @@ class Server(object):
         print("startGlassServer:")
         
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        self.glassServerSocket.bind(('3.134.84.232', self.glassPort))
+        self.glassServerSocket.bind((gethostname(), self.glassPort))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(1)
         print("GlassServerSocket is listening")
@@ -57,7 +57,7 @@ class Server(object):
                     data = conn.recv(40960000)
                     if data:
                         print("Got image")
-                        imageFile = open("receive/received.png", 'wb')
+                        imageFile = open("received.png", 'wb')
                         imageFile.write(data)
                         imageFile.close()
                         conn.send("GOT IMAGE".encode())
