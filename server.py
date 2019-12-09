@@ -111,7 +111,8 @@ class Server(object):
         kairos_face.remove_gallery(gallery_name="memento-test")
         image_paths = glob.glob(os.path.join('image/preset_image/', "*"))
         for image_path in image_paths:
-            file_name = image_path.split("\\")[1]
+            image_path = image_path.replace("\\", "/")
+            file_name = image_path.split("/")[2]
             person_name = file_name.split(".")[0]
             img = cv2.imread(image_path, 3)
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
