@@ -2,7 +2,8 @@ from socket import *
 
 glassClientSocket = socket(AF_INET, SOCK_STREAM)
 glassPort = 8088
-glassClientSocket.connect(('127.0.0.1', glassPort))
+glassClientSocket.connect(('3.134.84.232', glassPort))
+# glassClientSocket.connect(('10.105.249.164', glassPort))
 
 try:
     imageFile = open("sample.jpg", 'rb')
