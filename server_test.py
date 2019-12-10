@@ -55,7 +55,13 @@ class Server(object):
                     size = int(strings[1])
                     print("Got size: " + str(size))
                     conn.sendall("GOT SIZE".encode())
-                    data = conn.recv(40960000)
+                    data = b''
+                    chunk = conn.recv(4096)
+                    while len(chunk) == 4096:
+                        print("chunk size = " + str(len(chunk)))
+                        data += chunk
+                        chunk = conn.recv(4096)
+                    data += chunk
                     if data:
                         print("Got image")
                         imageFile = open("received.png", 'wb')
@@ -63,9 +69,6 @@ class Server(object):
                         imageFile.close()
                         conn.sendall("GOT IMAGE".encode())
                         conn.shutdown(SHUT_WR)
-                elif request.startswith('CLOSE'):
-                    print("Got close")
-                    conn.shutdown(SHUT_WR)
             except:
                 conn.shutdown(SHUT_WR)
                 continue
