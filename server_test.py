@@ -66,6 +66,7 @@ class Server(object):
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
+                        print("receive first packet")
                         request = data.decode()
                         if request.startswith('SIZE'):
                             strings = request.split()
