@@ -28,7 +28,8 @@ class Server(object):
         print("startGlassServer:")
         
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        self.glassServerSocket.bind((gethostname(), self.glassPort))
+        self.glassServerSocket.bind(('localhost', self.glassPort))
+        #self.glassServerSocket.bind((gethostname(), self.glassPort))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(1)
         print("GlassServerSocket is listening")
@@ -53,15 +54,15 @@ class Server(object):
                     strings = request.split()
                     size = int(strings[1])
                     print("Got size: " + str(size))
-                    conn.send("GOT SIZE".encode())
+                    conn.sendall("GOT SIZE".encode())
                     data = conn.recv(40960000)
                     if data:
                         print("Got image")
                         imageFile = open("received.png", 'wb')
                         imageFile.write(data)
                         imageFile.close()
-                        conn.send("GOT IMAGE".encode())
-                        conn.shutdown(SHUT_WR) # TODO instead of shutting down connection immediately, get the names with the help of Kairos and send them back
+                        conn.sendall("GOT IMAGE".encode())
+                        conn.shutdown(SHUT_WR)
                 elif request.startswith('CLOSE'):
                     print("Got close")
                     conn.shutdown(SHUT_WR)
