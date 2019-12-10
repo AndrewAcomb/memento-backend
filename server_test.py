@@ -59,6 +59,7 @@ class Server(object):
             for s in readable:
                 if s is self.glassServerSocket:
                     conn, addr = s.accept()
+                    print("got a connection")
                     conn.setblocking(0)
                     inputs.append(conn)
                 else:
