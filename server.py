@@ -88,6 +88,7 @@ class Server(object):
                                 received_size += len(data)
                             print("Got image\n")
                             imageFile.close()
+                            conn.sendall("GOT IMAGE".encode())
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             conn.sendall(name.encode())

@@ -23,6 +23,11 @@ try:
 
         print("client response = " + response)
 
+        response = glassClientSocket.recv(1024).decode()
+
+        print("client response = " + response)
+        
+
 finally:
     glassClientSocket.close()
 
