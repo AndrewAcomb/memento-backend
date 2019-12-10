@@ -28,8 +28,8 @@ class Server(object):
         print("startGlassServer:")
         
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        self.glassServerSocket.bind(('localhost', self.glassPort))
-        #self.glassServerSocket.bind((gethostname(), self.glassPort))
+        #self.glassServerSocket.bind(('localhost', self.glassPort))
+        self.glassServerSocket.bind((gethostname(), self.glassPort))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(1)
         print("GlassServerSocket is listening")
