@@ -14,18 +14,18 @@ try:
     glassClientSocket.sendall(("SIZE " + str(size)).encode())
     response = glassClientSocket.recv(1024).decode()
 
-    print("client response = " + response)
+    print("server response = " + response)
 
     if response == "GOT SIZE":
 
         glassClientSocket.sendall(imageBytes)
         response = glassClientSocket.recv(1024).decode()
 
-        print("client response = " + response)
+        print("server response = " + response)
 
         response = glassClientSocket.recv(1024).decode()
 
-        print("client response = " + response)
+        print("server response = " + response)
         
 
 finally:
