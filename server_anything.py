@@ -25,6 +25,7 @@ class Server(object):
         
         self.glassServerSocket.setblocking(0)
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
+        #self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
         self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
         print("GlassServerSocket binded to IP: ", gethostbyname(gethostname()))
         print("GlassServerSocket binded to port: ", self.glassPort)
@@ -61,10 +62,12 @@ class Server(object):
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
+                        print("bytes received:")
+                        print(data)
                         request = data.decode()
                         if request != "":
                             print("client request: " + request)
-                            conn.sendall("GOT REQUEST".encode())
+                            s.sendall("GOT REQUEST".encode())
                         s.close()
                     except Exception as e:
                         print(e)
