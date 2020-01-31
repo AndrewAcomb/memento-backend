@@ -37,7 +37,7 @@ class Server(object):
 
             if len(inputs) == 1:
 
-                status = input("receive next frame? (Y/N)")
+                status = input("No client connected! Listen to another client? (Y/N)")
 
                 if status == "n" or status == "N":
                     break
