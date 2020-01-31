@@ -60,13 +60,14 @@ class Server(object):
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
-                        print("bytes received:")
-                        print(data)
+                        #print("bytes received:")
+                        #print(data)
                         request = data.decode()
                         if request != "":
                             print("client request: " + request)
                             s.sendall("GOT REQUEST".encode())
                         else:
+                            print("client shut down connection.")
                             inputs.remove(s)
                             s.close()
                     except Exception as e:

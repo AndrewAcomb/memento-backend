@@ -12,6 +12,14 @@ try:
     response = glassClientSocket.recv(1024).decode()
 
     print("server response = " + response)
+
+    _input = input("> ")
+
+    while _input != "":
+        glassClientSocket.sendall(_input.encode())
+        response = glassClientSocket.recv(1024).decode()
+        print("server response = " + response)
+        _input = input("> ")
         
 
 finally:
