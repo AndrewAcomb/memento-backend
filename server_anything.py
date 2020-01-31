@@ -2,7 +2,6 @@ from socket import *
 from select import *
 import threading
 import _thread
-import cv2
 import os
 import glob
 import json
@@ -58,7 +57,6 @@ class Server(object):
                     conn.setblocking(0)
                     inputs.append(conn)
                 else:
-                    inputs.remove(s)
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
@@ -68,7 +66,9 @@ class Server(object):
                         if request != "":
                             print("client request: " + request)
                             s.sendall("GOT REQUEST".encode())
-                        s.close()
+                        else:
+                            inputs.remove(s)
+                            s.close()
                     except Exception as e:
                         print(e)
                         s.close()
