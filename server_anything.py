@@ -64,7 +64,7 @@ class Server(object):
                         #print(data)
                         request = data.decode()
                         if request != "":
-                            print("client request " + addr + " : " + request)
+                            print("client request " + str(addr) + " : " + request)
                             s.sendall("GOT REQUEST".encode())
                         else:
                             print("client shut down connection.")
