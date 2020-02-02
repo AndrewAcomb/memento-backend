@@ -30,10 +30,10 @@ class Server(object):
         self.phoneServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
         #self.phoneServerSocket.bind(("127.0.0.1", self.phonePort))
         self.phoneServerSocket.bind((gethostbyname(gethostname()), self.phonePort))
-        print("phoneServerSocket binded to IP: ", gethostbyname(gethostname()))
-        print("phoneServerSocket binded to port: ", self.phonePort)
+        print("\nPhoneServerSocket binded to IP: ", gethostbyname(gethostname()))
+        print("PhoneServerSocket binded to port: ", self.phonePort)
         self.phoneServerSocket.listen(5)
-        print("phoneServerSocket is listening\n")
+        print("PhoneServerSocket is listening\n")
 
         inputs = [self.phoneServerSocket]
 
@@ -41,7 +41,7 @@ class Server(object):
 
             if len(inputs) == 1:
 
-                status = input("No phone connected! Listen to another client? (Y/N)")
+                status = input("No phone connected! Listen to another phone? (Y/N)")
 
                 if status == "n" or status == "N":
                     break
@@ -89,7 +89,7 @@ class Server(object):
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
         #self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
         self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
-        print("GlassServerSocket binded to IP: ", gethostbyname(gethostname()))
+        print("\nGlassServerSocket binded to IP: ", gethostbyname(gethostname()))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(5)
         print("GlassServerSocket is listening\n")
@@ -100,7 +100,7 @@ class Server(object):
 
             if len(inputs) == 1:
 
-                status = input("No glass connected! Listen to another client? (Y/N)")
+                status = input("No glass connected! Listen to another glass? (Y/N)")
 
                 if status == "n" or status == "N":
                     break
