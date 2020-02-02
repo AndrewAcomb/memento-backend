@@ -12,8 +12,8 @@ class Server(object):
         print("Initializing:\n")
         self.glassServerSocket = socket(AF_INET, SOCK_STREAM)
         self.phoneServerSocket = socket(AF_INET, SOCK_STREAM)
-        self.phonePort = 8089
         self.glassPort = 8088
+        self.phonePort = 8089
     
 
     def runServer(self):
@@ -28,10 +28,10 @@ class Server(object):
 
         self.phoneServerSocket.setblocking(0)
         self.phoneServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        #self.phoneServerSocket.bind(("127.0.0.1", self.glassPort))
-        self.phoneServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
+        #self.phoneServerSocket.bind(("127.0.0.1", self.phonePort))
+        self.phoneServerSocket.bind((gethostbyname(gethostname()), self.phonePort))
         print("phoneServerSocket binded to IP: ", gethostbyname(gethostname()))
-        print("phoneServerSocket binded to port: ", self.glassPort)
+        print("phoneServerSocket binded to port: ", self.phonePort)
         self.phoneServerSocket.listen(5)
         print("phoneServerSocket is listening\n")
 
