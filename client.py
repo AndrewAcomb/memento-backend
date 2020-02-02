@@ -6,7 +6,7 @@ glassPort = 8088
 glassClientSocket.connect(('3.134.84.232', glassPort))
 
 try:
-    imageFile = open("sample.jpg", 'rb')
+    imageFile = open("yan_chen.jpg", 'rb')
     imageBytes = imageFile.read()
     size = len(imageBytes)
     imageFile.close()

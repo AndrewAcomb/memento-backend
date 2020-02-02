@@ -126,7 +126,7 @@ class Server(object):
             # recognizing cropped face image
             print("Recognizing: ")
             recognize_face_response = kairos_face.recognize_face(file=output_path, gallery_name='memento-test')
-            #print(recognize_face_response)
+            print(recognize_face_response)
             subject_id = recognize_face_response['images'][0]['candidates'][0]['subject_id']
             print("Name detected: " + subject_id + '\n')
             return subject_id
