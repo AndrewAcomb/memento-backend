@@ -162,7 +162,7 @@ class Server(object):
                             size = len(imageBytes)
                             imageFile.close()
                             s.sendall(("SIZE " + str(size)).encode())
-                            s.sendaLL(imageBytes)
+                            s.sendall(imageBytes)
                         if request != "":
                             print("Client " + str(s.getpeername()) + " request unknown: " + request)
                             s.sendall("UNKNOWN REQUEST".encode())

@@ -6,13 +6,13 @@ phonePort = 8089
 phoneClientSocket.connect(('3.134.84.232', phonePort))
 
 try:
-    phoneClientSocket.sendall(("NEW 1".encode())
+    phoneClientSocket.sendall("NEW 1".encode())
     response = phoneClientSocket.recv(1024).decode()
 
     if response.startswith('SIZE'):
         strings = response.split()
         size = int(strings[1])
-        imageFile = open("unknown_from_server.jpg")
+        imageFile = open("unknown_from_server.jpg", 'wb')
         received_size = 0
         while received_size != size:
             data = phoneClientSocket.recv(1024)
