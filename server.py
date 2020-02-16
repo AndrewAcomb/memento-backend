@@ -68,7 +68,6 @@ class Server(object):
                     conn.setblocking(0)
                     inputs.append(conn)
                 else:
-                    inputs.remove(s)
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
@@ -92,9 +91,16 @@ class Server(object):
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             conn.sendall(name.encode())
-                        s.close()
+                        else if request != "":
+                            print("Got string: ", request)
+                            conn.sendall("UNKNOWN REQUEST")
+                        else:
+                            print("Got Null, client shutting down connection.")
+                            inputs.remove(s)
+                            s.close()
                     except Exception as e:
                         print(e)
+                        inputs.remove(s)
                         s.close()
 
         self.glassServerSocket.close()

@@ -76,6 +76,7 @@ class Server(object):
                             s.close()
                     except Exception as e:
                         print(e)
+                        inputs.remove(s)
                         s.close()
 
         self.phoneServerSocket.close()
@@ -135,6 +136,7 @@ class Server(object):
                             s.close()
                     except Exception as e:
                         print(e)
+                        inputs.remove(s)
                         s.close()
 
         self.glassServerSocket.close()
