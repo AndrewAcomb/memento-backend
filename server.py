@@ -50,7 +50,7 @@ class Server(object):
 
             if len(inputs) == 1:
                 
-                time.sleep(1)
+                time.sleep(0.1)
 
                 status = input("No glass connected! Listen to another glass? (Y/N)")
 
@@ -129,7 +129,7 @@ class Server(object):
 
             if len(inputs) == 1:
 
-                time.sleep(1)
+                time.sleep(0.1)
                 
                 status = input("No phone connected! Listen to another phone? (Y/N)")
 
