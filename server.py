@@ -19,16 +19,16 @@ class Server(object):
         self.galleryName = "memento-test"
         self.initKairos()
         self.glassServerSocket = socket(AF_INET, SOCK_STREAM) # for handling request from google glass
-        #self.phoneServerSocket = socket(AF_INET, SOCK_STREAM) # for handling request from cell phone
+        self.phoneServerSocket = socket(AF_INET, SOCK_STREAM) # for handling request from cell phone
         self.glassPort = 8088
-        #self.phonePort = 8089
+        self.phonePort = 8089
     
 
     def runServer(self):
         glassServerThread = threading.Thread(target=Server.startGlassSocket, args=(self,))
-        #phoneServerThread = threading.Thread(target=Server.startPhoneSocket, args=(self,))
+        phoneServerThread = threading.Thread(target=Server.startPhoneSocket, args=(self,))
         glassServerThread.start()
-        #phoneServerThread.start()
+        phoneServerThread.start()
 
 
     def startGlassSocket(self):
@@ -49,7 +49,7 @@ class Server(object):
 
             if len(inputs) == 1:
 
-                status = input("receive next frame? (Y/N)")
+                status = input("No glass connected! Listen to another glass? (Y/N)")
 
                 if status == "n" or status == "N":
                     break
