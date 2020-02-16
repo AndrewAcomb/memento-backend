@@ -36,8 +36,9 @@ class Server(object):
         
         self.glassServerSocket.setblocking(0)
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        #self.glassServerSocket.bind(("localhost", self.glassPort))
-        self.glassServerSocket.bind((gethostname(), self.glassPort))
+        #self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
+        self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
+        print("\nGlassServerSocket binded to IP: ", gethostbyname(gethostname()))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(5)
         print("GlassServerSocket is listening\n")
@@ -75,8 +76,8 @@ class Server(object):
                         if request.startswith('SIZE'):
                             strings = request.split()
                             size = int(strings[1])
-                            print("Got size: " + str(size))
-                            conn.sendall("GOT SIZE".encode())
+                            print("Client " + str(s.getpeername()) + " request: post an image of " + str(size) + "Bytes.")
+                            s.sendall("GOT SIZE".encode())
                             if not os.path.exists('image/glass_image'):
                                 os.mkdir('image/glass_image')
                             imageFile = open("image/glass_image/received.jpg", 'wb')
@@ -85,17 +86,18 @@ class Server(object):
                                 data = s.recv(1024)
                                 imageFile.write(data)
                                 received_size += len(data)
+                            print("Client " + str(s.getpeername()) + " request: image bytes.")
                             print("Got image\n")
                             imageFile.close()
-                            conn.sendall("GOT IMAGE".encode())
+                            s.sendall("GOT IMAGE".encode())
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
-                            conn.sendall(name.encode())
+                            s.sendall(name.encode())
                         elif request != "":
-                            print("Got string: ", request)
-                            conn.sendall("UNKNOWN REQUEST")
+                            print("Client " + str(s.getpeername()) + " request unknown: " + request)
+                            s.sendall("UNKNOWN REQUEST".encode())
                         else:
-                            print("Got Null, client shutting down connection.")
+                            print("Client " + str(s.getpeername()) + " shut down connection.")
                             inputs.remove(s)
                             s.close()
                     except Exception as e:
@@ -107,7 +109,68 @@ class Server(object):
 
 
     def startPhoneSocket(self):
-        print("startPhoneSocket:\n")
+        print("Start Phone Socket:")
+
+        self.phoneServerSocket.setblocking(0)
+        self.phoneServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
+        #self.phoneServerSocket.bind(("127.0.0.1", self.phonePort))
+        self.phoneServerSocket.bind((gethostbyname(gethostname()), self.phonePort))
+        print("\nPhoneServerSocket binded to IP: ", gethostbyname(gethostname()))
+        print("PhoneServerSocket binded to port: ", self.phonePort)
+        self.phoneServerSocket.listen(5)
+        print("PhoneServerSocket is listening\n")
+
+        inputs = [self.phoneServerSocket]
+
+        while inputs:
+
+            if len(inputs) == 1:
+
+                status = input("No phone connected! Listen to another phone? (Y/N)")
+
+                if status == "n" or status == "N":
+                    break
+                
+                if status != "y" and status != "Y":
+                    continue
+                
+            readable, writable, exceptional = select(inputs, [], inputs)
+
+            for s in exceptional:
+                inputs.remove(s)
+                s.close()
+            
+            for s in readable:
+                if s is self.phoneServerSocket:
+                    conn, addr = s.accept()
+                    conn.setblocking(0)
+                    inputs.append(conn)
+                else:
+                    s.setblocking(1)
+                    try:
+                        data = s.recv(1024)
+                        request = data.decode()
+                        if request.startswith('NEW'):
+                            print("Client " + str(s.getpeername()) + " request: get a new face")
+                            imageFile = open("unknown.jpg", 'rb')
+                            imageBytes = imageFile.read()
+                            size = len(imageBytes)
+                            imageFile.close()
+                            s.sendall(("SIZE " + str(size)).encode())
+                            s.sendaLL(imageBytes)
+                        if request != "":
+                            print("Client " + str(s.getpeername()) + " request unknown: " + request)
+                            s.sendall("UNKNOWN REQUEST".encode())
+                        else:
+                            print("Client " + str(s.getpeername()) + " shut down connection.")
+                            inputs.remove(s)
+                            s.close()
+                    except Exception as e:
+                        print(e)
+                        inputs.remove(s)
+                        s.close()
+
+        self.phoneServerSocket.close()
 
 
     def analyzeFrame(self, image_path):
