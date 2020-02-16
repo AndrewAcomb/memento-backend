@@ -91,7 +91,7 @@ class Server(object):
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             conn.sendall(name.encode())
-                        else if request != "":
+                        elif request != "":
                             print("Got string: ", request)
                             conn.sendall("UNKNOWN REQUEST")
                         else:
