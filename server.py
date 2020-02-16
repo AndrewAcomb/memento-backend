@@ -8,6 +8,7 @@ import cv2
 import os
 import glob
 import json
+import time
 
 class Server(object):
 
@@ -48,6 +49,8 @@ class Server(object):
         while inputs:
 
             if len(inputs) == 1:
+                
+                time.sleep(1)
 
                 status = input("No glass connected! Listen to another glass? (Y/N)")
 
@@ -126,6 +129,8 @@ class Server(object):
 
             if len(inputs) == 1:
 
+                time.sleep(1)
+                
                 status = input("No phone connected! Listen to another phone? (Y/N)")
 
                 if status == "n" or status == "N":
