@@ -37,8 +37,8 @@ class Server(object):
         
         self.glassServerSocket.setblocking(0)
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
-        #self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
+        #self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
+        self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
         print("\nGlassServerSocket binded to IP: ", gethostbyname(gethostname()))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(5)
