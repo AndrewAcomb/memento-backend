@@ -38,6 +38,16 @@ class Server(object):
         inputs = [self.glassServerSocket]
 
         while inputs:
+
+            if len(inputs) == 1:
+
+                status = input("No glass connected! Listen to another glass? (Y/N)")
+
+                if status == "n" or status == "N":
+                    break
+                
+                if status != "y" and status != "Y":
+                    continue
                 
             readable, writable, exceptional = select(inputs, [], inputs)
 
@@ -90,6 +100,16 @@ class Server(object):
         inputs = [self.phoneServerSocket]
 
         while inputs:
+
+            if len(inputs) == 1:
+
+                status = input("No phone connected! Listen to another phone? (Y/N)")
+
+                if status == "n" or status == "N":
+                    break
+                
+                if status != "y" and status != "Y":
+                    continue
                 
             readable, writable, exceptional = select(inputs, [], inputs)
 
