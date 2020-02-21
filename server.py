@@ -37,8 +37,8 @@ class Server(object):
         
         self.glassServerSocket.setblocking(0)
         self.glassServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        #self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
-        self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
+        self.glassServerSocket.bind(("127.0.0.1", self.glassPort))
+        #self.glassServerSocket.bind((gethostbyname(gethostname()), self.glassPort))
         print("\nGlassServerSocket binded to IP: ", gethostbyname(gethostname()))
         print("GlassServerSocket binded to port: ", self.glassPort)
         self.glassServerSocket.listen(5)
@@ -72,7 +72,7 @@ class Server(object):
                             strings = request.split()
                             size = int(strings[1])
                             print("Glass client " + str(s.getpeername()) + " request: post an image of " + str(size) + "Bytes.")
-                           # s.sendall("GOT SIZE".encode())
+                            s.sendall("GOT SIZE".encode())
                             if not os.path.exists('image/glass_image'):
                                 os.mkdir('image/glass_image')
                             imageFile = open("image/glass_image/received.jpg", 'wb')
@@ -84,7 +84,7 @@ class Server(object):
                             print("Glass client " + str(s.getpeername()) + " request: image bytes.")
                             print("Got image\n")
                             imageFile.close()
-                            #s.sendall("GOT IMAGE".encode())
+                            s.sendall("GOT IMAGE".encode())
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             name = name.replace('_',' ')
