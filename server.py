@@ -27,9 +27,9 @@ class Server(object):
 
     def runServer(self):
         glassServerThread = threading.Thread(target=Server.startGlassSocket, args=(self,))
-        phoneServerThread = threading.Thread(target=Server.startPhoneSocket, args=(self,))
         glassServerThread.start()
-        phoneServerThread.start()
+        #phoneServerThread = threading.Thread(target=Server.startPhoneSocket, args=(self,))
+        #phoneServerThread.start()
 
 
     def startGlassSocket(self):
