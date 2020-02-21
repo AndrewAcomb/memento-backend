@@ -11,7 +11,7 @@ try:
     size = len(imageBytes)
     imageFile.close()
 
-    glassClientSocket.sendall(("SIZE " + str(size)).encode())
+    glassClientSocket.sendall("{:<1024}".format(("SIZE " + str(size))[:1024]).encode())
 
     glassClientSocket.sendall(imageBytes)
 
