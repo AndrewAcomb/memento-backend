@@ -18,7 +18,7 @@ class Server(object):
         kairos_face.settings.app_id = "8af0a9da"
         kairos_face.settings.app_key = "e24042917823dd0e625ecb500f4f9e44"
         self.galleryName = "memento-test"
-        self.initKairos()
+        #self.initKairos()
         self.glassServerSocket = socket(AF_INET, SOCK_STREAM) # for handling request from google glass
         self.phoneServerSocket = socket(AF_INET, SOCK_STREAM) # for handling request from cell phone
         self.glassPort = 8088
