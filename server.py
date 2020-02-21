@@ -203,7 +203,7 @@ class Server(object):
             cv2.imwrite(output_path, crop_img)
             # recognizing cropped face image
             print("Recognizing: ")
-            recognize_face_response = kairos_face.recognize_face(file=output_path, gallery_name='memento-test')
+            recognize_face_response = kairos_face.recognize_face(file=output_path, gallery_name='MementoTeamPhotos')
             #print(recognize_face_response)
             if 'candidates' in recognize_face_response['images'][0].keys():
                 # kairos knows the face
@@ -244,7 +244,7 @@ class Server(object):
                 cv2.imwrite(crop_img_path, crop_img)
                 # enroll cropped face images (not preset images)
                 print("Enrolling: " + crop_img_path + " => " + person_name + "\n")
-                enroll_face_response = kairos_face.enroll_face(file='image/preset_face/' + file_name, subject_id=person_name, gallery_name='memento-test')
+                enroll_face_response = kairos_face.enroll_face(file='image/preset_face/' + file_name, subject_id=person_name, gallery_name='MementoTeamPhotos')
                 #print(enroll_face_response)
                 face_id = enroll_face_response['face_id']
                 #print("face_id: " + face_id + "\n")
