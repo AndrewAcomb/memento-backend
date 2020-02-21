@@ -12,20 +12,12 @@ try:
     imageFile.close()
 
     glassClientSocket.sendall(("SIZE " + str(size)).encode())
+
+    glassClientSocket.sendall(imageBytes)
+
     response = glassClientSocket.recv(1024).decode()
 
     print("server response = " + response)
-
-    if response == "GOT SIZE":
-
-        glassClientSocket.sendall(imageBytes)
-        response = glassClientSocket.recv(1024).decode()
-
-        print("server response = " + response)
-
-        response = glassClientSocket.recv(1024).decode()
-
-        print("server response = " + response)
         
 
 finally:

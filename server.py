@@ -72,7 +72,7 @@ class Server(object):
                             strings = request.split()
                             size = int(strings[1])
                             print("Glass client " + str(s.getpeername()) + " request: post an image of " + str(size) + "Bytes.")
-                            s.sendall("GOT SIZE".encode())
+                            #s.sendall("GOT SIZE".encode())
                             if not os.path.exists('image/glass_image'):
                                 os.mkdir('image/glass_image')
                             imageFile = open("image/glass_image/received.jpg", 'wb')
@@ -84,7 +84,7 @@ class Server(object):
                             print("Glass client " + str(s.getpeername()) + " request: image bytes.")
                             print("Got image\n")
                             imageFile.close()
-                            s.sendall("GOT IMAGE".encode())
+                            #s.sendall("GOT IMAGE".encode())
                             # call Kairos to get name
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             name = name.replace('_',' ')
