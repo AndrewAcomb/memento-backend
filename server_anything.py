@@ -23,66 +23,6 @@ class Server(object):
         phoneServerThread.start()
 
 
-    def startPhoneSocket(self):
-        print("Start Phone Socket:")
-
-        self.phoneServerSocket.setblocking(0)
-        self.phoneServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
-        #self.phoneServerSocket.bind(("127.0.0.1", self.phonePort))
-        self.phoneServerSocket.bind((gethostbyname(gethostname()), self.phonePort))
-        print("\nPhoneServerSocket binded to IP: ", gethostbyname(gethostname()))
-        print("PhoneServerSocket binded to port: ", self.phonePort)
-        self.phoneServerSocket.listen(5)
-        print("PhoneServerSocket is listening\n")
-
-        inputs = [self.phoneServerSocket]
-
-        while inputs:
-
-            if len(inputs) == 1:
-
-                status = input("No phone connected! Listen to another phone? (Y/N)")
-
-                if status == "n" or status == "N":
-                    break
-                
-                if status != "y" and status != "Y":
-                    continue
-                
-            readable, writable, exceptional = select(inputs, [], inputs)
-
-            for s in exceptional:
-                inputs.remove(s)
-                s.close()
-            
-            for s in readable:
-                if s is self.phoneServerSocket:
-                    conn, addr = s.accept()
-                    conn.setblocking(0)
-                    inputs.append(conn)
-                else:
-                    s.setblocking(1)
-                    try:
-                        data = s.recv(1024)
-                        #print("bytes received:")
-                        #print(data)
-                        request = data.decode()
-                        if request != "":
-                            print("client " + str(s.getpeername()) + " request: " + request)
-                            s.sendall("GOT REQUEST".encode())
-                        else:
-                            print("client " + str(s.getpeername()) + " shut down connection.")
-                            inputs.remove(s)
-                            s.close()
-                    except Exception as e:
-                        print(e)
-                        inputs.remove(s)
-                        s.close()
-
-        self.phoneServerSocket.close()
-
-
-
     def startGlassSocket(self):
         print("Start Glass Socket:")
         
@@ -98,16 +38,6 @@ class Server(object):
         inputs = [self.glassServerSocket]
 
         while inputs:
-
-            if len(inputs) == 1:
-
-                status = input("No glass connected! Listen to another glass? (Y/N)")
-
-                if status == "n" or status == "N":
-                    break
-                
-                if status != "y" and status != "Y":
-                    continue
                 
             readable, writable, exceptional = select(inputs, [], inputs)
 
@@ -120,18 +50,21 @@ class Server(object):
                     conn, addr = s.accept()
                     conn.setblocking(0)
                     inputs.append(conn)
+                    print("Glass client " + str(conn.getpeername()) + " connected!")
                 else:
                     s.setblocking(1)
                     try:
                         data = s.recv(1024)
-                        #print("bytes received:")
-                        #print(data)
                         request = data.decode()
-                        if request != "":
-                            print("client " + str(s.getpeername()) + " request: " + request)
+                        if request.startswith('POST'):
+                            print("Glass client " + str(s.getpeername()) + " HTTP POST spam request. Connection shut down.")
+                            inputs.remove(s)
+                            s.close()
+                        elif request != "":
+                            print("Glass client " + str(s.getpeername()) + " request: " + request)
                             s.sendall("GOT REQUEST".encode())
                         else:
-                            print("client " + str(s.getpeername()) + " shut down connection.")
+                            print("Glass client " + str(s.getpeername()) + " shut down connection.")
                             inputs.remove(s)
                             s.close()
                     except Exception as e:
@@ -140,6 +73,58 @@ class Server(object):
                         s.close()
 
         self.glassServerSocket.close()
+
+
+    def startPhoneSocket(self):
+        print("Start Phone Socket:")
+
+        self.phoneServerSocket.setblocking(0)
+        self.phoneServerSocket.setsockopt(SOL_SOCKET, SO_KEEPALIVE, 1)
+        #self.phoneServerSocket.bind(("127.0.0.1", self.phonePort))
+        self.phoneServerSocket.bind((gethostbyname(gethostname()), self.phonePort))
+        print("\nPhoneServerSocket binded to IP: ", gethostbyname(gethostname()))
+        print("PhoneServerSocket binded to port: ", self.phonePort)
+        self.phoneServerSocket.listen(5)
+        print("PhoneServerSocket is listening\n")
+
+        inputs = [self.phoneServerSocket]
+
+        while inputs:
+                
+            readable, writable, exceptional = select(inputs, [], inputs)
+
+            for s in exceptional:
+                inputs.remove(s)
+                s.close()
+            
+            for s in readable:
+                if s is self.phoneServerSocket:
+                    conn, addr = s.accept()
+                    conn.setblocking(0)
+                    inputs.append(conn)
+                    print("Phone client " + str(conn.getpeername()) + " connected!")
+                else:
+                    s.setblocking(1)
+                    try:
+                        data = s.recv(1024)
+                        request = data.decode()
+                        if request.startswith('POST'):
+                            print("Phone client " + str(s.getpeername()) + " HTTP POST spam request. Connection shut down.")
+                            inputs.remove(s)
+                            s.close()
+                        elif request != "":
+                            print("Phone client " + str(s.getpeername()) + " request: " + request)
+                            s.sendall("GOT REQUEST".encode())
+                        else:
+                            print("Phone client " + str(s.getpeername()) + " shut down connection.")
+                            inputs.remove(s)
+                            s.close()
+                    except Exception as e:
+                        print(e)
+                        inputs.remove(s)
+                        s.close()
+
+        self.phoneServerSocket.close()
 
 
 server = Server()

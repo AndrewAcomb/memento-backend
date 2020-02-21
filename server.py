@@ -47,18 +47,6 @@ class Server(object):
         inputs = [self.glassServerSocket]
 
         while inputs:
-
-            if len(inputs) == 1:
-                
-                time.sleep(0.1)
-
-                status = input("No glass connected! Listen to another glass? (Y/N)")
-
-                if status == "n" or status == "N":
-                    break
-                
-                if status != "y" and status != "Y":
-                    continue
                 
             readable, writable, exceptional = select(inputs, [], inputs)
 
@@ -76,10 +64,14 @@ class Server(object):
                     try:
                         data = s.recv(1024)
                         request = data.decode()
-                        if request.startswith('SIZE'):
+                        if request.startswith('POST'):
+                            print("Glass client " + str(s.getpeername()) + " HTTP POST spam request. Connection shut down.")
+                            inputs.remove(s)
+                            s.close()
+                        elif request.startswith('SIZE'):
                             strings = request.split()
                             size = int(strings[1])
-                            print("Client " + str(s.getpeername()) + " request: post an image of " + str(size) + "Bytes.")
+                            print("Glass client " + str(s.getpeername()) + " request: post an image of " + str(size) + "Bytes.")
                             s.sendall("GOT SIZE".encode())
                             if not os.path.exists('image/glass_image'):
                                 os.mkdir('image/glass_image')
@@ -89,7 +81,7 @@ class Server(object):
                                 data = s.recv(1024)
                                 imageFile.write(data)
                                 received_size += len(data)
-                            print("Client " + str(s.getpeername()) + " request: image bytes.")
+                            print("Glass client " + str(s.getpeername()) + " request: image bytes.")
                             print("Got image\n")
                             imageFile.close()
                             s.sendall("GOT IMAGE".encode())
@@ -97,10 +89,10 @@ class Server(object):
                             name = self.analyzeFrame("image/glass_image/received.jpg")
                             s.sendall(name.encode())
                         elif request != "":
-                            print("Client " + str(s.getpeername()) + " request unknown: " + request)
+                            print("Glass client " + str(s.getpeername()) + " request unknown: " + request)
                             s.sendall("UNKNOWN REQUEST".encode())
                         else:
-                            print("Client " + str(s.getpeername()) + " shut down connection.")
+                            print("Glass client " + str(s.getpeername()) + " shut down connection.")
                             inputs.remove(s)
                             s.close()
                     except Exception as e:
@@ -126,18 +118,6 @@ class Server(object):
         inputs = [self.phoneServerSocket]
 
         while inputs:
-
-            if len(inputs) == 1:
-
-                time.sleep(0.1)
-                
-                status = input("No phone connected! Listen to another phone? (Y/N)")
-
-                if status == "n" or status == "N":
-                    break
-                
-                if status != "y" and status != "Y":
-                    continue
                 
             readable, writable, exceptional = select(inputs, [], inputs)
 
@@ -155,8 +135,12 @@ class Server(object):
                     try:
                         data = s.recv(1024)
                         request = data.decode()
-                        if request.startswith('NEW'):
-                            print("Client " + str(s.getpeername()) + " request: get a new face")
+                        if request.startswith('POST'):
+                            print("Phone client " + str(s.getpeername()) + " HTTP POST spam request. Connection shut down.")
+                            inputs.remove(s)
+                            s.close()
+                        elif request.startswith('NEW'):
+                            print("Phone client " + str(s.getpeername()) + " request: get a new face")
                             imageFile = open("unknown.jpg", 'rb')
                             imageBytes = imageFile.read()
                             size = len(imageBytes)
@@ -164,10 +148,10 @@ class Server(object):
                             s.sendall(("SIZE " + str(size)).encode())
                             s.sendall(imageBytes)
                         elif request != "":
-                            print("Client " + str(s.getpeername()) + " request unknown: " + request)
+                            print("Phone client " + str(s.getpeername()) + " request unknown: " + request)
                             s.sendall("UNKNOWN REQUEST".encode())
                         else:
-                            print("Client " + str(s.getpeername()) + " shut down connection.")
+                            print("Phone client " + str(s.getpeername()) + " shut down connection.")
                             inputs.remove(s)
                             s.close()
                     except Exception as e:
